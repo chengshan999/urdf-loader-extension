@@ -4,10 +4,7 @@
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.URDFViewer = factory(global.THREE, global.THREE, global.URDFLoader));
 })(this, (function (THREE, OrbitControls_js, URDFLoader) { 'use strict';
 
-    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-    function _interopNamespace(e) {
-        if (e && e.__esModule) return e;
+    function _interopNamespaceDefault(e) {
         var n = Object.create(null);
         if (e) {
             Object.keys(e).forEach(function (k) {
@@ -20,12 +17,11 @@
                 }
             });
         }
-        n["default"] = e;
+        n.default = e;
         return Object.freeze(n);
     }
 
-    var THREE__namespace = /*#__PURE__*/_interopNamespace(THREE);
-    var URDFLoader__default = /*#__PURE__*/_interopDefaultLegacy(URDFLoader);
+    var THREE__namespace = /*#__PURE__*/_interopNamespaceDefault(THREE);
 
     const tempVec2 = new THREE__namespace.Vector2();
     const emptyRaycast = () => {};
@@ -545,7 +541,7 @@
 
                 }
 
-                const loader = new URDFLoader__default["default"](manager);
+                const loader = new URDFLoader(manager);
                 loader.packages = pkg;
                 loader.loadMeshCb = this.loadMeshFunc;
                 loader.fetchOptions = { mode: 'cors', credentials: 'same-origin' };

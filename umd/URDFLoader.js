@@ -4,8 +4,7 @@
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.URDFLoader = factory(global.THREE, global.THREE, global.THREE));
 })(this, (function (THREE, STLLoader_js, ColladaLoader_js) { 'use strict';
 
-    function _interopNamespace(e) {
-        if (e && e.__esModule) return e;
+    function _interopNamespaceDefault(e) {
         var n = Object.create(null);
         if (e) {
             Object.keys(e).forEach(function (k) {
@@ -18,11 +17,11 @@
                 }
             });
         }
-        n["default"] = e;
+        n.default = e;
         return Object.freeze(n);
     }
 
-    var THREE__namespace = /*#__PURE__*/_interopNamespace(THREE);
+    var THREE__namespace = /*#__PURE__*/_interopNamespaceDefault(THREE);
 
     const _tempAxis = new THREE.Vector3();
     const _tempEuler = new THREE.Euler();
@@ -552,6 +551,13 @@
             this.workingPath = '';
             this.fetchOptions = {};
 
+            // 添加钩子
+            this.robotHook = (robotNodes, linkMap, jointMap, curRobotObject3D) => {};
+            this.jointHook = (curJointChildNode, curJointObject3D) => {};
+            this.linkHook = (curLinkChildNode, curLinkObject3D) => {};
+            this.linkVisualHook = (curLinkVisualNode, curLinkVisualObject3D) => {};
+            this.linkCollisionHook = (curLinkCollisionNode, curLinkCollisionObject3D) => {};
+
         }
 
         /* Public API */
@@ -638,6 +644,13 @@
             const linkMap = {};
             const jointMap = {};
             const materialMap = {};
+
+            // 钩子
+            const robotHook = this.robotHook;
+            const jointHook = this.jointHook;
+            const linkHook = this.linkHook;
+            const linkVisualHook = this.linkVisualHook;
+            const linkCollisionHook = this.linkCollisionHook;
 
             // Resolves the path of mesh files
             function resolvePath(path) {
@@ -737,7 +750,6 @@
                 const visualMap = {};
                 const colliderMap = {};
                 links.forEach(l => {
-
                     const name = l.getAttribute('name');
                     const isRoot = robot.querySelector(`child[link="${ name }"]`) === null;
                     linkMap[name] = processLink(l, visualMap, colliderMap, isRoot ? obj : null);
@@ -751,6 +763,11 @@
                     jointMap[name] = processJoint(j);
 
                 });
+
+                /*** #新增# ***/
+                if (robotHook) robotHook(robotNodes, linkMap, jointMap, obj);
+                /*** #新增# ***/
+
 
                 obj.joints = jointMap;
                 obj.links = linkMap;
@@ -858,7 +875,14 @@
                         obj.limit.lower = parseFloat(n.getAttribute('lower') || obj.limit.lower);
                         obj.limit.upper = parseFloat(n.getAttribute('upper') || obj.limit.upper);
 
+                    } else {
+
+                        /*** #新增# ***/
+                        if (jointHook) jointHook(n, obj);
+                        /*** #新增# ***/
+
                     }
+
                 });
 
                 // Join the links
@@ -878,13 +902,14 @@
 
                 }
 
+                
+
                 return obj;
 
             }
 
             // Process the <link> nodes
             function processLink(link, visualMap, colliderMap, target = null) {
-
                 if (target === null) {
 
                     target = new URDFLink();
@@ -896,6 +921,10 @@
                 target.urdfName = target.name;
                 target.urdfNode = link;
 
+                /*** #新增# ***/
+                if (linkHook) linkHook(link, target);
+                /*** #新增# ***/
+
                 if (parseVisual) {
 
                     const visualNodes = children.filter(n => n.nodeName.toLowerCase() === 'visual');
@@ -903,6 +932,10 @@
 
                         const v = processLinkElement(vn, materialMap);
                         target.add(v);
+
+                        /*** #新增# ***/
+                        if (linkVisualHook) linkVisualHook(vn, v);
+                        /*** #新增# ***/
 
                         if (vn.hasAttribute('name')) {
 
@@ -924,6 +957,10 @@
 
                         const c = processLinkElement(cn);
                         target.add(c);
+
+                        /*** #新增# ***/
+                        if (linkCollisionHook) linkCollisionHook(cn, c);
+                        /*** #新增# ***/
 
                         if (cn.hasAttribute('name')) {
 
