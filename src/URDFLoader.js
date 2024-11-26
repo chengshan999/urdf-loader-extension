@@ -390,13 +390,10 @@ class URDFLoader {
                     obj.limit.lower = parseFloat(n.getAttribute('lower') || obj.limit.lower);
                     obj.limit.upper = parseFloat(n.getAttribute('upper') || obj.limit.upper);
 
-                } else {
-
-                    /*** #新增# ***/
-                    if (jointHook) jointHook(n, obj)
-                    /*** #新增# ***/
-
                 }
+                /*** #新增# ***/
+                if (jointHook) jointHook(n, obj)
+                /*** #新增# ***/
 
             });
 

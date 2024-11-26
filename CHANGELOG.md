@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.12.4] - 2024.11.26
+### Added
+- 增加了robotHook/jointHook/linkHook/linkVisualHook/linkCollisionHook几个hook的ts类型，修复了jointHook不能遍历全部子元素的问题.
+- Increased robotHook jointHook/linkHook linkVisualHook/linkCollisionHook several type of ts hook, fixes the problem jointHook can run through all child elements.
+
 ## [0.12.3] - 2024.09.02
 ### Added
 - d.ts definition for `loadAsync`.

@@ -1,6 +1,6 @@
 {
   "name": "urdf-loader-extension",
-  "version": "0.12.3",
+  "version": "0.12.4",
   "description": "URDF Loader for THREE.js and webcomponent viewer",
   "main": "src/URDFLoader.js",
   "type": "module",
@@ -10,7 +10,8 @@
     "build-examples": "parcel build ./example/*.html --out-dir ./example/bundle/ --public-url . --no-cache --no-source-maps --no-content-hash",
     "test": "jest",
     "lint": "eslint \"./src/*.js\" \"./test/*.js\" && tsc -p tsconfig.json --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "publish": "npm publish --registry https://registry.npmjs.org"
   },
   "files": [
     "src/*",
